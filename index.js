@@ -5,10 +5,23 @@ const cheerio = require("cheerio");
 
 const app = express();
 
-const url =
-  "https://www.milehighcomics.com/cgi-bin/backissue.cgi?action=enlarge&issue=24427252592%200";
-axios(url).then((response) => {
-  const html = response.data;
-  console.log(html)
-});
+const url = "https://covrprice.com/issue/west-coast-avengers-vol-2-45/";
+
+axios(url)
+  .then((response) => {
+    const html = response.data;
+    const $ = cheerio.load(html);
+
+    const info = [];
+
+    $("span", html).each(function () {
+      const item = $(this).text();
+      info.push({
+        item,
+      });
+    });
+    console.log(info);
+  })
+  .catch((err) => console.log(err));
+
 app.listen(PORT, () => console.log(`server running on PORT ${PORT}`));
